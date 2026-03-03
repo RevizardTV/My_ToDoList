@@ -1,9 +1,12 @@
 //variables
 let throttleTimeout=null;
 //Node Linkers
+console.log("TEST");
 const inputBox=document.getElementById("setInput");
 const listGroup=document.getElementById("setListGroup");
 const LSCHECK=document.getElementById("consoleCheck");
+const taskAdder=document.getElementById("taskAdder");
+const deleteAll=document.getElementById('DeleteAll');
 //Functions
 const consoleCheck=()=>{
     console.log(localStorage.getItem("myToDoList"));
@@ -32,6 +35,7 @@ const addToList=(taskName,isCompleted=false)=>{
     newTask.appendChild(remover);
     newTask.setAttribute('draggable',true);
     newTask.classList.add("taskItemSelectable");
+    newTask.setAttribute("name","task-item-data");
     listGroup.appendChild(newTask);
     saveToLocalStorage();
 }
@@ -66,12 +70,23 @@ const loadToLocalStorage=()=>{
     })
 }
 //EventListeners
-inputBox.addEventListener('change',(task)=>{
-    const tasked=task.target.value;
+taskAdder.addEventListener('click',(task)=>{
+    task.preventDefault();
+    const tasked=inputBox.value;
     if(tasked){
         addToList(tasked);
-        task.target.value="";
+        inputBox.value="";
     }
+})
+
+DeleteAll.addEventListener('click',()=>{
+    const allTasks=document.getElementsByName("task-item-data");
+    allTasks.forEach(li=>{
+        li.remove();
+    })
+    if(allTasks!=[])listGroup.querySelector('li').remove();
+    console.log(allTasks);
+    saveToLocalStorage();
 })
 
 listGroup.addEventListener('click',(item)=>{
